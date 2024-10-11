@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">PicStream</string>
+
+    <string name="error_view_title">Houve um erro ao carregar os dados</string>
+    <string name="error_view_subtitle">por favor, tente novamente.</string>
+
+    <string name="label_cannot_download">Erro ao baixar a imagem, verifique sua conexão.</string>
+    <string name="label_can_download">Baixando imagem..</string>
+
+    <string name="title_network_info_error_view">Não foi possível conectar a internet, por favor tente novamente.</string>
+    <string name="title_network_info_success_view">Tudo certo! 🫡 Sua conexão com a foi internet restabelecida.</string>
+
+    <string name="label_search_input">ex: paisagem</string>
+
+    <string name="one_message_title">encontre as melhores\n</string>
+    <string name="two_message_title">fotos e vídeos&#160;</string>
+    <string name="three_message_title">em um só lugar.</string>
+
+    <string name="label_category">Categorias</string>
+    <string name="label_snack_bar">Ok</string>
+    <string name="label_info_download">✨ Baixe fotos em alta qualidade</string>
+
+
+    <!-- Options Screen -->
+
+    <string name="title_screen_option">Opções</string>
+    <string name="title_option_notification">Notificações</string>
+    <string name="description_option_notification">Ative ou desative as notificações para receber atualizações importantes e alertas diretamente no seu dispositivo.</string>
+
+</resources>
