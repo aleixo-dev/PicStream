@@ -1,15 +1,7 @@
 package com.nicolas.picstream.ui.home
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.ReportDrawnWhen
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,12 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -48,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -64,7 +53,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.nicolas.picstream.R
 import com.nicolas.picstream.components.ErrorView
-import com.nicolas.picstream.components.NetworkInfoView
 import com.nicolas.picstream.components.StaggeredListView
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.model.Photo
@@ -72,7 +60,6 @@ import com.nicolas.picstream.data.model.Topic
 import com.nicolas.picstream.utils.showToast
 import org.koin.androidx.compose.koinViewModel
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
