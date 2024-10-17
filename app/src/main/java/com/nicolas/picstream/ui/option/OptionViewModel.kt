@@ -10,11 +10,11 @@ import kotlinx.coroutines.launch
 
 class OptionViewModel(private val dataStore: DataStore) : ViewModel() {
 
-    val notificationActive: StateFlow<String> = dataStore.notificationActive
+    val notificationActive: StateFlow<Boolean> = dataStore.isNotificationEnable
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = ""
+            initialValue = true
         )
 
     fun toggleNotification(isActive: Boolean) = viewModelScope.launch {

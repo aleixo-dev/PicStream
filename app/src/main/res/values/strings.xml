@@ -20,6 +20,8 @@
     <string name="label_snack_bar">Ok</string>
     <string name="label_info_download">✨ Baixe fotos em alta qualidade</string>
 
+    <string name="title_notification">🤳Foto do Dia!</string>
+    <string name="description_notification">Confira a imagem em destaque de hoje e faça o download diretamente para o seu dispositivo.</string>
 
     <!-- Options Screen -->
 

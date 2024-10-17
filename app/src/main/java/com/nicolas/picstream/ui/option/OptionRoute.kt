@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -40,12 +42,12 @@ fun OptionRoute(
     val scope = rememberCoroutineScope()
     val notificationActive by optionViewModel.notificationActive.collectAsStateWithLifecycle()
 
-    ReportDrawnWhen { notificationActive.isNotEmpty() }
+    ReportDrawnWhen { notificationActive }
 
     OptionScreen(
         modifier = modifier,
         onBackScreen = onBackScreen,
-        active = notificationActive.toBoolean(),
+        active = notificationActive,
         onCheckedChange = {
             scope.launch { optionViewModel.toggleNotification(it) }
         }
@@ -98,7 +100,6 @@ internal fun OptionScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(optionHelper.options, key = { it.id }) { option ->
-
                 OptionItem(
                     title = option.title,
                     description = option.description,
@@ -133,6 +134,7 @@ fun OptionItem(
                 style = MaterialTheme.typography.bodySmall
             )
         }
+        Spacer(modifier = Modifier.width(16.dp))
         Switch(
             checked = enabled,
             onCheckedChange = { onCheckedChange.invoke(it) },
