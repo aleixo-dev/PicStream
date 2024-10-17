@@ -2,9 +2,11 @@ package com.nicolas.picstream.helper
 
 import kotlinx.coroutines.flow.Flow
 
-interface DataStore {
+interface NotificationFlag {
+    val isNotificationEnable : Flow<Boolean>
+}
 
-    val notificationActive : Flow<String>
+interface DataStore : NotificationFlag {
 
     suspend fun toggleNotification(active: Boolean)
 

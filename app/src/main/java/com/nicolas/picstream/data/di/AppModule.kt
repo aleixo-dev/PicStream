@@ -8,6 +8,7 @@ import com.nicolas.picstream.constants.Constants
 import com.nicolas.picstream.data.local.database.PhotoDatabase
 import com.nicolas.picstream.data.remote.mediator.PhotoRemoteMediator
 import com.nicolas.picstream.helper.DataStore
+import com.nicolas.picstream.helper.NotificationFlag
 import com.nicolas.picstream.helper.DataStoreManager
 import com.nicolas.picstream.ui.home.HomeViewModel
 import com.nicolas.picstream.ui.option.OptionViewModel
@@ -41,9 +42,8 @@ val appModule = module {
         )
     }
 
-    single<DataStore> {
-        DataStoreManager(context = androidApplication())
-    }
+    single<DataStore> { DataStoreManager(context = androidApplication()) }
+    single<NotificationFlag> { get<DataStore>() }
 
     viewModel {
         HomeViewModel(
