@@ -1,9 +1,13 @@
 package com.nicolas.picstream
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -20,19 +24,31 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.nicolas.picstream.helper.DataStoreManager
+import com.nicolas.picstream.helper.NotificationHelper
 import com.nicolas.picstream.navigation.Screen
 import com.nicolas.picstream.ui.design.theme.PicStreamTheme
 import com.nicolas.picstream.ui.home.HomeRoute
 import com.nicolas.picstream.ui.option.OptionRoute
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.KoinAndroidContext
 
 class MainActivity : ComponentActivity() {
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) { _ -> }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
+        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        CoroutineScope(Dispatchers.Main).launch {
+            NotificationHelper(this@MainActivity).scheduleDailyNotification()
+        }
+
         setContent {
             PicStreamTheme {
 

@@ -13,13 +13,15 @@
     <string name="label_search_input">ex: paisagem</string>
 
     <string name="one_message_title">encontre as melhores\n</string>
-    <string name="two_message_title">fotos e vídeos&#160;</string>
+    <string name="two_message_title">fotos&#160;</string>
     <string name="three_message_title">em um só lugar.</string>
 
     <string name="label_category">Categorias</string>
     <string name="label_snack_bar">Ok</string>
     <string name="label_info_download">✨ Baixe fotos em alta qualidade</string>
 
+    <string name="title_notification">🤳Foto do Dia!</string>
+    <string name="description_notification">Confira a imagem em destaque de hoje e faça o download diretamente para o seu dispositivo.</string>
 
     <!-- Options Screen -->
 
