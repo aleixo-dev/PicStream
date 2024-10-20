@@ -64,8 +64,6 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onConnectionLost: () -> Unit,
-    onConnectionReestablish: () -> Unit,
     onNavigateOptions: () -> Unit,
     onNavigateNotifications: () -> Unit
 ) {
@@ -79,10 +77,6 @@ fun HomeRoute(
     val hideKeyboard by viewModel.hideKeyboard.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { viewModel.getTopics() }
-    LaunchedEffect(networkStatus.value) {
-        if (networkStatus.value == NetworkStatus.Disconnected)
-            onConnectionLost() else onConnectionReestablish()
-    }
 
     HomeScreen(
         modifier = modifier,
