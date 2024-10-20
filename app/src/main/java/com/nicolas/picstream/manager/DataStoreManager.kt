@@ -1,4 +1,4 @@
-package com.nicolas.picstream.helper
+package com.nicolas.picstream.manager
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

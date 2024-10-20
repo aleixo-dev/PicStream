@@ -1,4 +1,4 @@
-package com.nicolas.picstream.helper
+package com.nicolas.picstream.manager
 
 import kotlinx.coroutines.flow.Flow
 

@@ -7,9 +7,9 @@ import androidx.room.Room
 import com.nicolas.picstream.constants.Constants
 import com.nicolas.picstream.data.local.database.PhotoDatabase
 import com.nicolas.picstream.data.remote.mediator.PhotoRemoteMediator
-import com.nicolas.picstream.helper.DataStore
-import com.nicolas.picstream.helper.NotificationFlag
-import com.nicolas.picstream.helper.DataStoreManager
+import com.nicolas.picstream.manager.DataStore
+import com.nicolas.picstream.manager.NotificationFlag
+import com.nicolas.picstream.manager.DataStoreManager
 import com.nicolas.picstream.ui.home.HomeViewModel
 import com.nicolas.picstream.ui.option.OptionViewModel
 import org.koin.android.ext.koin.androidApplication

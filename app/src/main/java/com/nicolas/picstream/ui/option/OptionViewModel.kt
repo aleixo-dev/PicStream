@@ -2,7 +2,7 @@ package com.nicolas.picstream.ui.option
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nicolas.picstream.helper.DataStore
+import com.nicolas.picstream.manager.DataStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
