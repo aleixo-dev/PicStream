@@ -74,6 +74,6 @@ class PhotoRemoteMediator(
     }
 
     companion object {
-        const val ITEMS_PER_PAGE = 20
+        const val ITEMS_PER_PAGE = 15
     }
 }
