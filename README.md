@@ -5,9 +5,15 @@
 PicStrem é um aplicativo para baixar qualquer tipo ou categoria de foto em alta resolução em apenas alguns cliques.
 
 ## 📱 Screenshots
-Inicio                 | Categoria | Pesquisa
-:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://github.com/user-attachments/assets/8c558fa2-ddda-42b2-b677-638ea5ca294b" /> | <img src="https://github.com/user-attachments/assets/6014f79b-4d1d-4de0-865b-1bfd2153b0ee" /> | <img src="https://github.com/user-attachments/assets/8adfa281-ae7e-4ae2-9406-e68d80a7b5fe" />
+<p align="start">
+   <img src="https://github.com/user-attachments/assets/8c558fa2-ddda-42b2-b677-638ea5ca294b"
+      width="210" />
+   <img src="https://github.com/user-attachments/assets/6014f79b-4d1d-4de0-865b-1bfd2153b0ee" width="210" /> 
+   <img src="https://github.com/user-attachments/assets/8adfa281-ae7e-4ae2-9406-e68d80a7b5fe" width="210" />
+</p>
+
+
+
 
 ## 🏗️ Build With
 - 100% Kotlin
