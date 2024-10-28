@@ -85,7 +85,7 @@ internal fun OptionScreen(
             )
             Text(
                 "Opções",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Icon(

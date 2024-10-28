@@ -1,4 +1,4 @@
-package com.nicolas.picstream.downloader
+package com.nicolas.picstream.receiver
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CircularProgressIndicator
@@ -68,6 +69,8 @@ fun HomeRoute(
     onNavigateNotifications: () -> Unit
 ) {
 
+    val context = LocalContext.current
+
     val state by viewModel.photoState.collectAsStateWithLifecycle()
     val topics by viewModel.photoTopics.collectAsStateWithLifecycle()
     val searchPhotoPagingItems = viewModel.photoQueryState.collectAsLazyPagingItems()
@@ -75,6 +78,7 @@ fun HomeRoute(
     val networkStatus = viewModel.networkConnectivityState.collectAsState()
     val topicPhotos = viewModel.photoTopicFilter.collectAsLazyPagingItems()
     val hideKeyboard by viewModel.hideKeyboard.collectAsStateWithLifecycle()
+    val popUpNotification by viewModel.isDownloadNotification.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { viewModel.getTopics() }
 
@@ -90,7 +94,17 @@ fun HomeRoute(
         topicPhotos = topicPhotos,
         hideKeyboard = hideKeyboard,
         onNavigateOptions = onNavigateOptions,
-        onNavigateNotifications = onNavigateNotifications
+        onNavigateNotifications = {
+            onNavigateNotifications()
+            viewModel.readAllDownloadNotification()
+        },
+        onDownloadImage = {
+            viewModel.saveDownloadNotification(
+                title = context.getString(R.string.local_notification),
+                photoDescription = it
+            )
+        },
+        popUpNotification = popUpNotification
     )
 }
 
@@ -107,7 +121,9 @@ fun HomeScreen(
     topicPhotos: LazyPagingItems<Photo>,
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
-    onNavigateNotifications: () -> Unit
+    onNavigateNotifications: () -> Unit,
+    onDownloadImage: (String) -> Unit,
+    popUpNotification: Boolean
 ) {
 
     ReportDrawnWhen {
@@ -144,7 +160,9 @@ fun HomeScreen(
                     topicPhotos = topicPhotos,
                     hideKeyboard = hideKeyboard,
                     onNavigateOptions = onNavigateOptions,
-                    onNavigateNotifications = onNavigateNotifications
+                    onNavigateNotifications = onNavigateNotifications,
+                    onDownloadImage = onDownloadImage,
+                    popUpNotification = popUpNotification
                 )
             }
         }
@@ -163,7 +181,9 @@ fun SectionDefaultPhoto(
     topicPhotos: LazyPagingItems<Photo>,
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
-    onNavigateNotifications: () -> Unit
+    onNavigateNotifications: () -> Unit,
+    onDownloadImage: (String) -> Unit,
+    popUpNotification: Boolean
 ) {
 
     val context = LocalContext.current
@@ -244,9 +264,11 @@ fun SectionDefaultPhoto(
                     modifier = Modifier
                         .size(26.dp)
                         .clickable { onNavigateNotifications.invoke() },
-                    imageVector = Icons.Rounded.Notifications,
+                    imageVector = if (popUpNotification)
+                        Icons.Rounded.NotificationsActive else Icons.Rounded.Notifications,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = if (popUpNotification)
+                        MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Icon(
                     modifier = Modifier
@@ -299,6 +321,7 @@ fun SectionDefaultPhoto(
             topicPhotos
         } else if (text.isBlank()) photos else searchPhotoPagingItems,
         networkStatus = networkStatus,
+        onDownloadImage = onDownloadImage
     )
 }
 

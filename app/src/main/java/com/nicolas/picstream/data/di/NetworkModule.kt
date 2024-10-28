@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
 
     single { provideRetrofitService() }
-    single<PhotoRepository> { PhotoRepositoryImpl(get()) }
+    single<PhotoRepository> { PhotoRepositoryImpl(get(), get()) }
 }
 
 private fun provideOkhttpClient(): OkHttpClient {
