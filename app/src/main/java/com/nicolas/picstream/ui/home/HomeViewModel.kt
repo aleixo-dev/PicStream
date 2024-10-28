@@ -10,9 +10,11 @@ import com.nicolas.picstream.connectivity.NetworkConnectivityService
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.local.entity.PhotoEntity
 import com.nicolas.picstream.data.mapper.toPhoto
+import com.nicolas.picstream.data.model.Notification
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.data.model.Topic
 import com.nicolas.picstream.data.repository.PhotoRepository
+import com.nicolas.picstream.utils.toCurrentDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class HomeViewModel(
     private val photoRepository: PhotoRepository,
@@ -40,6 +43,9 @@ class HomeViewModel(
     private val _photoTopics = MutableStateFlow<List<Topic>>(emptyList())
     val photoTopics: StateFlow<List<Topic>> get() = _photoTopics.asStateFlow()
 
+    private val _isDownloadNotification = MutableStateFlow(false)
+    val isDownloadNotification: StateFlow<Boolean> get() = _isDownloadNotification.asStateFlow()
+
     val networkConnectivityState: StateFlow<NetworkStatus> =
         networkConnectivityService.networkStatus
             .stateIn(
@@ -52,6 +58,7 @@ class HomeViewModel(
         .flow
         .map { pagingData -> pagingData.map { it.toPhoto() } }
         .cachedIn(viewModelScope)
+
 
     var hideKeyboard = MutableStateFlow(false)
         private set
@@ -99,7 +106,24 @@ class HomeViewModel(
         _photoInputQuery.value = input
     }
 
+    fun saveDownloadNotification(title: String, photoDescription: String) = viewModelScope.launch {
+        val isDownloadNotificationSave = photoRepository.saveDownloadNotification(
+            Notification(
+                title = title,
+                description = photoDescription,
+                date = Date().toCurrentDate()
+            )
+        )
+
+        _isDownloadNotification.update { isDownloadNotificationSave != -1L }
+    }
+
+    fun readAllDownloadNotification() = viewModelScope.launch {
+        _isDownloadNotification.update { false }
+    }
+
     companion object {
         const val DELAY_TEXT_CHANGE = 2000L
     }
+
 }

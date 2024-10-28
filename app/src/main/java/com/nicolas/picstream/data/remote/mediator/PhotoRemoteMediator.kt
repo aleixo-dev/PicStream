@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.nicolas.picstream.data.local.database.PhotoDatabase
+import com.nicolas.picstream.data.local.database.ApplicationDatabase
 import com.nicolas.picstream.data.local.entity.PhotoEntity
 import com.nicolas.picstream.data.mapper.toPhotoEntity
 import com.nicolas.picstream.data.remote.api.service.UnsplashService
@@ -15,7 +15,7 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class PhotoRemoteMediator(
     private val unsplashApi: UnsplashService,
-    private val photoDatabase: PhotoDatabase
+    private val applicationDatabase: ApplicationDatabase
 ) : RemoteMediator<Int, PhotoEntity>() {
 
     private var currentPage = 1
@@ -52,14 +52,14 @@ class PhotoRemoteMediator(
                 perPage = ITEMS_PER_PAGE
             )
 
-            photoDatabase.withTransaction {
+            applicationDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    photoDatabase.photoDao().clearAll()
+                    applicationDatabase.photoDao().clearAll()
                 }
 
                 val photoEntities = response.body()?.map { it.toPhotoEntity() }
                 photoEntities?.let {
-                    photoDatabase.photoDao().insert(photoEntities)
+                    applicationDatabase.photoDao().insert(photoEntities)
                 }
             }
 
@@ -74,6 +74,6 @@ class PhotoRemoteMediator(
     }
 
     companion object {
-        const val ITEMS_PER_PAGE = 15
+        const val ITEMS_PER_PAGE = 30
     }
 }

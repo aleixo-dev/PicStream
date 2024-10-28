@@ -21,6 +21,7 @@ import com.nicolas.picstream.helper.DailyScheduleNotificationHelper
 import com.nicolas.picstream.navigation.Screen
 import com.nicolas.picstream.ui.design.theme.PicStreamTheme
 import com.nicolas.picstream.ui.home.HomeRoute
+import com.nicolas.picstream.ui.notifications.NotificationRoute
 import com.nicolas.picstream.ui.option.OptionRoute
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.core.component.KoinComponent
@@ -41,13 +42,15 @@ class MainActivity : ComponentActivity(), KoinComponent {
         setContent {
             PicStreamTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     NavigationHost(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
+
 @Composable
 fun NavigationHost(
     modifier: Modifier = Modifier,
@@ -64,7 +67,7 @@ fun NavigationHost(
             KoinAndroidContext {
                 HomeRoute(
                     onNavigateOptions = { navController.navigate(Screen.Options.route) },
-                    onNavigateNotifications = {}
+                    onNavigateNotifications = { navController.navigate(Screen.Notifications.route) }
                 )
             }
         }
@@ -73,6 +76,8 @@ fun NavigationHost(
                 onBackScreen = { navController.popBackStack() },
             )
         }
-        composable(route = Screen.Notifications.route) { }
+        composable(route = Screen.Notifications.route) {
+            NotificationRoute(onBackScreen = { navController.popBackStack() })
+        }
     }
 }

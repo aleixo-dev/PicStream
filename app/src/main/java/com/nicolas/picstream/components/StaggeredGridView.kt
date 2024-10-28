@@ -43,7 +43,8 @@ import kotlinx.coroutines.launch
 fun StaggeredListView(
     modifier: Modifier = Modifier,
     photos: LazyPagingItems<Photo>,
-    networkStatus: State<NetworkStatus>
+    networkStatus: State<NetworkStatus>,
+    onDownloadImage: (String) -> Unit
 ) {
 
     val listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
@@ -79,16 +80,15 @@ fun StaggeredListView(
                             /* State Hoisting: pattern of de moving state to composable's caller. A: state -> B, B: event -> A  */
                             onDownload = {
                                 if (networkStatus.value == NetworkStatus.Connected && !isSelected) {
-                                    downloader.downloadFile(
+                                    val downloadImageId = downloader.downloadFile(
                                         url = currentPhoto.url.regular,
                                         title = currentPhoto.slug.toString()
                                     )
                                     isSelectItems.add(currentPhoto.id)
-                                    showToast(
-                                        context = context,
-                                        message = context.getString(R.string.label_can_download)
-                                    )
+                                    if (downloadImageId != -1L)
+                                        onDownloadImage.invoke(currentPhoto.slug.toString())
                                 }
+
 
                                 if (networkStatus.value == NetworkStatus.Disconnected) {
                                     showToast(
