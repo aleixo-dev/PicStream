@@ -1,6 +1,8 @@
 package com.nicolas.picstream.data.mapper
 
+import com.nicolas.picstream.data.local.entity.NotificationEntity
 import com.nicolas.picstream.data.local.entity.PhotoEntity
+import com.nicolas.picstream.data.model.Notification
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.data.model.PhotoUrl
 import com.nicolas.picstream.data.model.Topic
@@ -33,6 +35,7 @@ fun TopicResponse.toTopic() = Topic(
 
 suspend fun List<PhotoResponse>.toDomain() = map { it.toDomain() }
 
+
 fun PhotoResponse.toPhotoEntity() = PhotoEntity(
     id = id,
     slug = slug,
@@ -52,3 +55,21 @@ fun PhotoEntity.toPhoto() = Photo(
     )
 )
 
+fun Notification.toNotificationEntity() = NotificationEntity(
+    id = id ?: 0,
+    title = title,
+    description = description,
+    date = date
+)
+
+fun List<NotificationEntity>.toNotificationModel(): List<Notification> {
+
+    return this.map {
+        Notification(
+            id = it.id,
+            title = it.title,
+            description = it.description,
+            date = it.date
+        )
+    }
+}
