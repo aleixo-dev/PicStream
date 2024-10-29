@@ -31,7 +31,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receiver.AlarmManagerBootReceiver"
+        <receiver
+            android:name=".receiver.AlarmManagerBootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -52,6 +53,11 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
     </application>
 
 </manifest>
