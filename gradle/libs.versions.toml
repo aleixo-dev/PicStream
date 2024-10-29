@@ -19,6 +19,9 @@ room = "2.6.1"
 ksp = "2.0.0-1.0.24"
 splash-screen = "1.0.1"
 data-store = "1.1.1"
+gms-google-services = "4.4.2"
+firebaseBom = "33.5.1"
+firebaseAdMob = "23.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,9 +62,14 @@ okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercept
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-admob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "firebaseAdMob" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "gms-google-services" }
 
