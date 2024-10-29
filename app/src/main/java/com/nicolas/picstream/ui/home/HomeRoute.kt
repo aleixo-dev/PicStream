@@ -1,5 +1,6 @@
 package com.nicolas.picstream.ui.home
 
+import android.app.Activity
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -55,6 +56,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.nicolas.picstream.R
 import com.nicolas.picstream.components.ErrorView
 import com.nicolas.picstream.components.StaggeredListView
+import com.nicolas.picstream.components.showInterstitialAd
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.data.model.Topic
@@ -308,6 +310,10 @@ fun SectionDefaultPhoto(
                         onTopicSelect.invoke(slug)
                         index
                     }
+
+                if (selectedChip.intValue != -1) {
+                    showInterstitialAd(context, onShowAd = { it.show(context as Activity) })
+                }
 
             },
             selectedChip = selectedChip.intValue,

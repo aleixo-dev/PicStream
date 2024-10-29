@@ -17,6 +17,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.ads.MobileAds
 import com.nicolas.picstream.helper.DailyScheduleNotificationHelper
 import com.nicolas.picstream.navigation.Screen
 import com.nicolas.picstream.ui.design.theme.PicStreamTheme
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this)
         enableEdgeToEdge()
         installSplashScreen()
         requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
