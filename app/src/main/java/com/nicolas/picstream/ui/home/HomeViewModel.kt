@@ -14,7 +14,6 @@ import com.nicolas.picstream.data.model.Notification
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.data.model.Topic
 import com.nicolas.picstream.data.repository.PhotoRepository
-import com.nicolas.picstream.utils.toCurrentDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +25,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class HomeViewModel(
     private val photoRepository: PhotoRepository,
@@ -106,16 +104,24 @@ class HomeViewModel(
         _photoInputQuery.value = input
     }
 
-    fun saveDownloadNotification(title: String, photoDescription: String) = viewModelScope.launch {
+    fun saveDownloadNotification(
+        title: String, description: String, date: String, username: String, url: String
+    ) = viewModelScope.launch {
         val isDownloadNotificationSave = photoRepository.saveDownloadNotification(
             Notification(
                 title = title,
-                description = photoDescription,
-                date = Date().toCurrentDate()
+                description = description,
+                date = date,
+                username = username,
+                url = url
             )
         )
 
         _isDownloadNotification.update { isDownloadNotificationSave != -1L }
+    }
+
+    fun getDownloadUrl(photoId: String) = viewModelScope.launch {
+        photoRepository.getDownloadUrl(photoId)
     }
 
     fun readAllDownloadNotification() = viewModelScope.launch {

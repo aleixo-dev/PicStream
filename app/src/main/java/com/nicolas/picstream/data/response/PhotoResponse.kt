@@ -9,5 +9,8 @@ data class PhotoResponse(
     val id: String,
     val slug : String,
     @SerializedName("urls")
-    val url: UrlResponse
+    val url: UrlResponse,
+    val user : Photographer,
+    @SerializedName("alt_description")
+    val description : String?,
 )

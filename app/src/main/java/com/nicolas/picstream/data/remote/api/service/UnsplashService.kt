@@ -13,21 +13,26 @@ interface UnsplashService {
     @GET("photos")
     suspend fun getPhotos(
         @Query("page") page: Int,
-        @Query("per_page") perPage : Int,
-    ) : Response<List<PhotoResponse>>
+        @Query("per_page") perPage: Int,
+    ): Response<List<PhotoResponse>>
 
     @GET("search/photos")
     suspend fun searchPhoto(
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
-    ) : SearchPhotoResponse
+    ): SearchPhotoResponse
 
     @GET("topics")
-    suspend fun getTopics() : List<TopicResponse>
+    suspend fun getTopics(): List<TopicResponse>
 
     @GET("topics/{slug}/photos")
     suspend fun getTopicPhotos(
-        @Path("slug") slug : String,
-    ) : List<PhotoResponse>
+        @Path("slug") slug: String,
+    ): List<PhotoResponse>
+
+    @GET("photos/{id}/download")
+    suspend fun getDownloadUrl(
+        @Path("id") id: String
+    )
 }

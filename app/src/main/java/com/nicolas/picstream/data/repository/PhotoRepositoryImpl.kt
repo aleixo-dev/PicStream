@@ -39,6 +39,10 @@ class PhotoRepositoryImpl(
         }
     }
 
+    override suspend fun getDownloadUrl(photoId: String) = withContext(coroutineScope) {
+        service.getDownloadUrl(photoId)
+    }
+
     override fun getTopicPhotos(slug: String): Flow<PagingData<Photo>> {
         return Pager(
             config = PagingConfig(pageSize = MAX_PAGE_SIZE, prefetchDistance = 20)
