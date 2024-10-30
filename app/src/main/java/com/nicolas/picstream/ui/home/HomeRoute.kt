@@ -100,11 +100,18 @@ fun HomeRoute(
             onNavigateNotifications()
             viewModel.readAllDownloadNotification()
         },
-        onDownloadImage = {
+        onDownloadImage = { notificationsParams ->
             viewModel.saveDownloadNotification(
-                title = context.getString(R.string.local_notification),
-                photoDescription = it
+                title = context.getString(
+                    R.string.local_notification,
+                    notificationsParams.description
+                ),
+                description = notificationsParams.description,
+                date = notificationsParams.date,
+                username = notificationsParams.username,
+                url = notificationsParams.url
             )
+            viewModel.getDownloadUrl(notificationsParams.id.toString())
         },
         popUpNotification = popUpNotification
     )
@@ -124,7 +131,7 @@ fun HomeScreen(
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
     onNavigateNotifications: () -> Unit,
-    onDownloadImage: (String) -> Unit,
+    onDownloadImage: (notificationParams: NotificationParams) -> Unit,
     popUpNotification: Boolean
 ) {
 
@@ -184,7 +191,7 @@ fun SectionDefaultPhoto(
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
     onNavigateNotifications: () -> Unit,
-    onDownloadImage: (String) -> Unit,
+    onDownloadImage: (notificationParams: NotificationParams) -> Unit,
     popUpNotification: Boolean
 ) {
 
