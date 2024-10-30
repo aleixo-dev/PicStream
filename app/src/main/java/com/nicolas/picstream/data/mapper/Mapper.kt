@@ -22,7 +22,9 @@ suspend fun PhotoResponse.toDomain() = withContext(Dispatchers.IO) {
             small = url.small,
             thumb = url.thumb,
             smallS3 = url.smallS3
-        )
+        ),
+        photographerName = user.name,
+        description = description
     )
 }
 
@@ -39,7 +41,9 @@ suspend fun List<PhotoResponse>.toDomain() = map { it.toDomain() }
 fun PhotoResponse.toPhotoEntity() = PhotoEntity(
     id = id,
     slug = slug,
-    imageUrl = url.regular
+    imageUrl = url.regular,
+    photographerName = user.name,
+    description = description ?: ""
 )
 
 fun PhotoEntity.toPhoto() = Photo(
@@ -51,15 +55,19 @@ fun PhotoEntity.toPhoto() = Photo(
         small = "",
         thumb = "",
         smallS3 = "",
-        regular = imageUrl,
-    )
+        regular = imageUrl
+    ),
+    photographerName = photographerName,
+    description = description
 )
 
 fun Notification.toNotificationEntity() = NotificationEntity(
     id = id ?: 0,
     title = title,
     description = description,
-    date = date
+    date = date,
+    username = username,
+    url = url
 )
 
 fun List<NotificationEntity>.toNotificationModel(): List<Notification> {
@@ -69,7 +77,9 @@ fun List<NotificationEntity>.toNotificationModel(): List<Notification> {
             id = it.id,
             title = it.title,
             description = it.description,
-            date = it.date
+            date = it.date,
+            username = it.username,
+            url = it.url
         )
     }
 }

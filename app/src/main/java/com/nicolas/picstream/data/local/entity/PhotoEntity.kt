@@ -8,5 +8,7 @@ data class PhotoEntity(
     @PrimaryKey
     val id : String,
     val imageUrl : String,
-    val slug : String
+    val slug : String,
+    val photographerName : String,
+    val description : String,
 )

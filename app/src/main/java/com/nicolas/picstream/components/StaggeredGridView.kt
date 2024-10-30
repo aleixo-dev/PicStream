@@ -36,6 +36,7 @@ import com.nicolas.picstream.R
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.downloader.AndroidDownloader
+import com.nicolas.picstream.ui.home.NotificationParams
 import com.nicolas.picstream.utils.showToast
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,7 @@ fun StaggeredListView(
     modifier: Modifier = Modifier,
     photos: LazyPagingItems<Photo>,
     networkStatus: State<NetworkStatus>,
-    onDownloadImage: (String) -> Unit
+    onDownloadImage: (notificationParams: NotificationParams) -> Unit
 ) {
 
     val listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
@@ -82,13 +83,24 @@ fun StaggeredListView(
                                 if (networkStatus.value == NetworkStatus.Connected && !isSelected) {
                                     val downloadImageId = downloader.downloadFile(
                                         url = currentPhoto.url.regular,
-                                        title = currentPhoto.slug.toString()
+                                        title = "Photo by ${currentPhoto.photographerName}",
+                                        description = currentPhoto.description.toString()
                                     )
                                     isSelectItems.add(currentPhoto.id)
                                     if (downloadImageId != -1L)
-                                        onDownloadImage.invoke(currentPhoto.slug.toString())
+                                        onDownloadImage(
+                                            NotificationParams(
+                                                id = currentPhoto.id,
+                                                title = context.getString(
+                                                    R.string.local_notification,
+                                                    currentPhoto.description
+                                                ),
+                                                description = currentPhoto.description.toString(),
+                                                username = currentPhoto.photographerName.toString(),
+                                                url = currentPhoto.url.regular
+                                            )
+                                        )
                                 }
-
 
                                 if (networkStatus.value == NetworkStatus.Disconnected) {
                                     showToast(
