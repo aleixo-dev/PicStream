@@ -36,7 +36,7 @@ fun PhotoView(
     Box(modifier = modifier) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(photo.url.regular)
+                .data(photo.url)
                 .crossfade(true)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .memoryCachePolicy(CachePolicy.ENABLED)

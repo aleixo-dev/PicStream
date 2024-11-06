@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.option
+package com.nicolas.picstream.presentation.option
 
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.clickable
@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nicolas.picstream.ui.option.options.OptionHelper
+import com.nicolas.picstream.presentation.option.options.OptionHelper
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

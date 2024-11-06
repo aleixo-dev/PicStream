@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.home
+package com.nicolas.picstream.presentation.home
 
 sealed class HomeUiState {
 

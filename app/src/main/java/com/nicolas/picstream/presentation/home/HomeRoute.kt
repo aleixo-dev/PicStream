@@ -1,12 +1,9 @@
-package com.nicolas.picstream.ui.home
+package com.nicolas.picstream.presentation.home
 
-import android.app.Activity
 import androidx.activity.compose.ReportDrawnWhen
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,17 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.DarkMode
+import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -56,11 +52,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.nicolas.picstream.R
 import com.nicolas.picstream.components.ErrorView
 import com.nicolas.picstream.components.StaggeredListView
-import com.nicolas.picstream.components.showInterstitialAd
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.model.Photo
-import com.nicolas.picstream.data.model.Topic
-import com.nicolas.picstream.utils.showToast
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,21 +61,18 @@ fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateOptions: () -> Unit,
-    onNavigateNotifications: () -> Unit
+    onNavigateNotifications: () -> Unit,
 ) {
 
     val context = LocalContext.current
 
     val state by viewModel.photoState.collectAsStateWithLifecycle()
-    val topics by viewModel.photoTopics.collectAsStateWithLifecycle()
     val searchPhotoPagingItems = viewModel.photoQueryState.collectAsLazyPagingItems()
     val photosPagingItems = viewModel.photoLocalPagingFlow.collectAsLazyPagingItems()
     val networkStatus = viewModel.networkConnectivityState.collectAsState()
-    val topicPhotos = viewModel.photoTopicFilter.collectAsLazyPagingItems()
     val hideKeyboard by viewModel.hideKeyboard.collectAsStateWithLifecycle()
     val popUpNotification by viewModel.isDownloadNotification.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) { viewModel.getTopics() }
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
 
     HomeScreen(
         modifier = modifier,
@@ -91,9 +81,6 @@ fun HomeRoute(
         searchPhotoPagingItems = searchPhotoPagingItems,
         photosPagingItems = photosPagingItems,
         networkStatus = networkStatus,
-        topics = topics,
-        onTopicSelect = viewModel::onTopic,
-        topicPhotos = topicPhotos,
         hideKeyboard = hideKeyboard,
         onNavigateOptions = onNavigateOptions,
         onNavigateNotifications = {
@@ -111,9 +98,10 @@ fun HomeRoute(
                 username = notificationsParams.username,
                 url = notificationsParams.url
             )
-            viewModel.getDownloadUrl(notificationsParams.id.toString())
         },
-        popUpNotification = popUpNotification
+        popUpNotification = popUpNotification,
+        onChangeDarkTheme = viewModel::toggleTheme,
+        isDarkMode = themeMode
     )
 }
 
@@ -125,14 +113,13 @@ fun HomeScreen(
     searchPhotoPagingItems: LazyPagingItems<Photo>,
     photosPagingItems: LazyPagingItems<Photo>,
     networkStatus: State<NetworkStatus>,
-    topics: List<Topic>,
-    onTopicSelect: (slug: String) -> Unit,
-    topicPhotos: LazyPagingItems<Photo>,
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
     onNavigateNotifications: () -> Unit,
     onDownloadImage: (notificationParams: NotificationParams) -> Unit,
-    popUpNotification: Boolean
+    popUpNotification: Boolean,
+    onChangeDarkTheme: () -> Unit,
+    isDarkMode : Boolean
 ) {
 
     ReportDrawnWhen {
@@ -164,14 +151,13 @@ fun HomeScreen(
                     photos = photosPagingItems,
                     searchPhotoPagingItems = searchPhotoPagingItems,
                     networkStatus = networkStatus,
-                    topics = topics,
-                    onTopicSelect = onTopicSelect,
-                    topicPhotos = topicPhotos,
                     hideKeyboard = hideKeyboard,
                     onNavigateOptions = onNavigateOptions,
                     onNavigateNotifications = onNavigateNotifications,
                     onDownloadImage = onDownloadImage,
-                    popUpNotification = popUpNotification
+                    popUpNotification = popUpNotification,
+                    onChangeDarkTheme = onChangeDarkTheme,
+                    isDarkMode = isDarkMode
                 )
             }
         }
@@ -185,17 +171,15 @@ fun SectionDefaultPhoto(
     photos: LazyPagingItems<Photo>,
     searchPhotoPagingItems: LazyPagingItems<Photo>,
     networkStatus: State<NetworkStatus>,
-    topics: List<Topic>,
-    onTopicSelect: (slug: String) -> Unit,
-    topicPhotos: LazyPagingItems<Photo>,
     hideKeyboard: Boolean,
     onNavigateOptions: () -> Unit,
     onNavigateNotifications: () -> Unit,
     onDownloadImage: (notificationParams: NotificationParams) -> Unit,
-    popUpNotification: Boolean
+    popUpNotification: Boolean,
+    onChangeDarkTheme: () -> Unit,
+    isDarkMode : Boolean
 ) {
 
-    val context = LocalContext.current
     var text by remember { mutableStateOf("") }
     val selectedChip = remember { mutableIntStateOf(-1) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -287,6 +271,14 @@ fun SectionDefaultPhoto(
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Icon(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clickable { onChangeDarkTheme.invoke() },
+                    imageVector = if (isDarkMode) Icons.Rounded.DarkMode else Icons.Rounded.LightMode,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
         Text(
@@ -297,75 +289,12 @@ fun SectionDefaultPhoto(
                 .padding(top = 8.dp)
         )
         Spacer(modifier = Modifier.height(18.dp))
-        SectionPhotoTopics(
-            modifier = modifier,
-            topics = topics,
-            onSelectChip = { index, slug ->
-
-                if (networkStatus.value == NetworkStatus.Disconnected) {
-                    showToast(
-                        context,
-                        context.getString(R.string.label_cannot_download)
-                    )
-                    return@SectionPhotoTopics
-                }
-
-                selectedChip.intValue =
-                    if (selectedChip.intValue == index) {
-                        -1
-                    } else {
-                        onTopicSelect.invoke(slug)
-                        index
-                    }
-
-                if (selectedChip.intValue != -1) {
-                    showInterstitialAd(context, onShowAd = { it.show(context as Activity) })
-                }
-
-            },
-            selectedChip = selectedChip.intValue,
-            isTopicsVisible = networkStatus.value === NetworkStatus.Connected
-        )
     }
     Spacer(modifier = Modifier.height(10.dp))
     StaggeredListView(
         modifier = modifier,
-        photos = if (selectedChip.intValue != -1) {
-            topicPhotos
-        } else if (text.isBlank()) photos else searchPhotoPagingItems,
+        photos = if (text.isBlank()) photos else searchPhotoPagingItems,
         networkStatus = networkStatus,
         onDownloadImage = onDownloadImage
     )
-}
-
-@Composable
-fun SectionPhotoTopics(
-    modifier: Modifier = Modifier,
-    topics: List<Topic>,
-    onSelectChip: (index: Int, slug: String) -> Unit,
-    selectedChip: Int,
-    isTopicsVisible: Boolean
-) {
-    AnimatedVisibility(isTopicsVisible, label = "") {
-        Column(modifier = modifier) {
-            Text(
-                stringResource(R.string.label_category),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 15.dp)
-            )
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(start = 15.dp, end = 15.dp)
-            ) {
-                itemsIndexed(topics) { index, topic ->
-                    InputChip(
-                        selected = selectedChip == index,
-                        onClick = { onSelectChip.invoke(index, topic.slug) },
-                        label = { Text(topic.title) },
-                        shape = MaterialTheme.shapes.medium
-                    )
-                }
-            }
-        }
-    }
 }

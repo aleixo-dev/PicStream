@@ -36,7 +36,7 @@ import com.nicolas.picstream.R
 import com.nicolas.picstream.connectivity.NetworkStatus
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.downloader.AndroidDownloader
-import com.nicolas.picstream.ui.home.NotificationParams
+import com.nicolas.picstream.presentation.home.NotificationParams
 import com.nicolas.picstream.utils.showToast
 import kotlinx.coroutines.launch
 
@@ -82,9 +82,9 @@ fun StaggeredListView(
                             onDownload = {
                                 if (networkStatus.value == NetworkStatus.Connected && !isSelected) {
                                     val downloadImageId = downloader.downloadFile(
-                                        url = currentPhoto.url.regular,
+                                        url = currentPhoto.url,
                                         title = "Photo by ${currentPhoto.photographerName}",
-                                        description = currentPhoto.description.toString()
+                                        description = currentPhoto.alt.toString()
                                     )
                                     isSelectItems.add(currentPhoto.id)
                                     if (downloadImageId != -1L)
@@ -93,11 +93,11 @@ fun StaggeredListView(
                                                 id = currentPhoto.id,
                                                 title = context.getString(
                                                     R.string.local_notification,
-                                                    currentPhoto.description
+                                                    currentPhoto.alt
                                                 ),
-                                                description = currentPhoto.description.toString(),
+                                                description = currentPhoto.alt,
                                                 username = currentPhoto.photographerName.toString(),
-                                                url = currentPhoto.url.regular
+                                                url = currentPhoto.url
                                             )
                                         )
                                 }

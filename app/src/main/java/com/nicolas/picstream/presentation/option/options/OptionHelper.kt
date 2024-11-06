@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.option.options
+package com.nicolas.picstream.presentation.option.options
 
 import android.content.Context
 import com.nicolas.picstream.R

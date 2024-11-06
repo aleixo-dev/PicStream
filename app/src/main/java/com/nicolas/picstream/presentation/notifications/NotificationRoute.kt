@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.notifications
+package com.nicolas.picstream.presentation.notifications
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

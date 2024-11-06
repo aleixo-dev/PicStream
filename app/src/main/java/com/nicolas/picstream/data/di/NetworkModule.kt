@@ -2,7 +2,7 @@ package com.nicolas.picstream.data.di
 
 import com.nicolas.picstream.BuildConfig
 import com.nicolas.picstream.data.remote.api.interceptor.AuthorizationInterceptor
-import com.nicolas.picstream.data.remote.api.service.UnsplashService
+import com.nicolas.picstream.data.remote.api.service.PhotoService
 import com.nicolas.picstream.data.repository.PhotoRepository
 import com.nicolas.picstream.data.repository.PhotoRepositoryImpl
 import okhttp3.OkHttpClient
@@ -33,11 +33,11 @@ private fun provideOkhttpClient(): OkHttpClient {
     }.build()
 }
 
-private fun provideRetrofitService(): UnsplashService {
+private fun provideRetrofitService(): PhotoService {
     return Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .client(provideOkhttpClient())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(UnsplashService::class.java)
+        .create(PhotoService::class.java)
 }
