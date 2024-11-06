@@ -10,9 +10,9 @@ import com.nicolas.picstream.data.remote.mediator.PhotoRemoteMediator
 import com.nicolas.picstream.manager.DataStore
 import com.nicolas.picstream.manager.NotificationFlag
 import com.nicolas.picstream.manager.DataStoreManager
-import com.nicolas.picstream.ui.home.HomeViewModel
-import com.nicolas.picstream.ui.notifications.NotificationViewModel
-import com.nicolas.picstream.ui.option.OptionViewModel
+import com.nicolas.picstream.presentation.home.HomeViewModel
+import com.nicolas.picstream.presentation.notifications.NotificationViewModel
+import com.nicolas.picstream.presentation.option.OptionViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -37,7 +37,7 @@ val appModule = module {
         Pager(
             config = PagingConfig(pageSize = Constants.PER_PAGE),
             remoteMediator = PhotoRemoteMediator(
-                unsplashApi = get(),
+                photoService = get(),
                 applicationDatabase = get()
             ),
             pagingSourceFactory = { get<ApplicationDatabase>().photoDao().pagingSource() }
@@ -51,7 +51,8 @@ val appModule = module {
         HomeViewModel(
             photoRepository = get(),
             pager = get(),
-            networkConnectivityService = get()
+            networkConnectivityService = get(),
+            dataStore = get()
         )
     }
 

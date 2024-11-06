@@ -6,6 +6,7 @@ import com.nicolas.picstream.data.model.Notification
 import com.nicolas.picstream.data.model.Photo
 import com.nicolas.picstream.data.model.PhotoUrl
 import com.nicolas.picstream.data.model.Topic
+import com.nicolas.picstream.data.response.PagingPhotoResponse
 import com.nicolas.picstream.data.response.PhotoResponse
 import com.nicolas.picstream.data.response.TopicResponse
 import kotlinx.coroutines.Dispatchers
@@ -13,18 +14,10 @@ import kotlinx.coroutines.withContext
 
 suspend fun PhotoResponse.toDomain() = withContext(Dispatchers.IO) {
     Photo(
-        slug = slug,
         id = id,
-        url = PhotoUrl(
-            raw = url.raw,
-            full = url.full,
-            regular = url.regular,
-            small = url.small,
-            thumb = url.thumb,
-            smallS3 = url.smallS3
-        ),
-        photographerName = user.name,
-        description = description
+        url = src.original ?: "",
+        photographerName = photographer ?: "",
+        alt = alt ?: ""
     )
 }
 
@@ -35,30 +28,22 @@ fun TopicResponse.toTopic() = Topic(
     status = status
 )
 
-suspend fun List<PhotoResponse>.toDomain() = map { it.toDomain() }
+suspend fun List<PagingPhotoResponse>.toDomain() =
+    map { it.photos.map { photos -> photos.toDomain() } }
 
 
 fun PhotoResponse.toPhotoEntity() = PhotoEntity(
     id = id,
-    slug = slug,
-    imageUrl = url.regular,
-    photographerName = user.name,
-    description = description ?: ""
+    url = src.original ?: "",
+    photographerName = photographer ?: "",
+    alt = alt ?: ""
 )
 
 fun PhotoEntity.toPhoto() = Photo(
     id = id,
-    slug = slug,
-    url = PhotoUrl(
-        raw = "",
-        full = "",
-        small = "",
-        thumb = "",
-        smallS3 = "",
-        regular = imageUrl
-    ),
+    url = url,
     photographerName = photographerName,
-    description = description
+    alt = alt
 )
 
 fun Notification.toNotificationEntity() = NotificationEntity(
