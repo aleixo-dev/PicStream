@@ -50,6 +50,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.nicolas.picstream.R
+import com.nicolas.picstream.components.BannerAdMobView
 import com.nicolas.picstream.components.ErrorView
 import com.nicolas.picstream.components.StaggeredListView
 import com.nicolas.picstream.connectivity.NetworkStatus
@@ -288,7 +289,9 @@ fun SectionDefaultPhoto(
                 .padding(horizontal = 15.dp)
                 .padding(top = 8.dp)
         )
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(4.dp))
+        BannerAdMobView(modifier = modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(4.dp))
     }
     Spacer(modifier = Modifier.height(10.dp))
     StaggeredListView(

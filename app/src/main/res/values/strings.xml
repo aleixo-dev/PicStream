@@ -32,5 +32,6 @@
     <string name="local_notification">Sua imagem <b>%1$s</b> foi baixada com sucesso, verifique na sua galeria ou no seu app de photo!</string>
 
     <string name="dummy_admob_interstitial_key">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="dummy_admob_banner_key">ca-app-pub-3940256099942544/9214589741</string>
 
 </resources>
