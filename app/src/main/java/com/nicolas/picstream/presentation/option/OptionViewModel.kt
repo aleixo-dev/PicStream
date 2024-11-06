@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.option
+package com.nicolas.picstream.presentation.option
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

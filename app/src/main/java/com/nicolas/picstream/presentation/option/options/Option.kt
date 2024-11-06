@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.option.options
+package com.nicolas.picstream.presentation.option.options
 
 data class Option(
     val id : String = (0..10000).random().toString(),

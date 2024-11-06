@@ -33,6 +33,7 @@ android {
         buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
         buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
         buildConfigField("String", "INTERSTITIAL_KEY", "\"${properties.getProperty("INTERSTITIAL_KEY")}\"")
+        buildConfigField("String", "BANNER_KEY", "\"${properties.getProperty("BANNER_KEY")}\"")
 
     }
 

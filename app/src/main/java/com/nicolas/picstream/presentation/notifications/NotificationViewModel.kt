@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.notifications
+package com.nicolas.picstream.presentation.notifications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

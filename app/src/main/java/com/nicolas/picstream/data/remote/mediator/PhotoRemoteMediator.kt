@@ -8,13 +8,13 @@ import androidx.room.withTransaction
 import com.nicolas.picstream.data.local.database.ApplicationDatabase
 import com.nicolas.picstream.data.local.entity.PhotoEntity
 import com.nicolas.picstream.data.mapper.toPhotoEntity
-import com.nicolas.picstream.data.remote.api.service.UnsplashService
+import com.nicolas.picstream.data.remote.api.service.PhotoService
 import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class PhotoRemoteMediator(
-    private val unsplashApi: UnsplashService,
+    private val photoService: PhotoService,
     private val applicationDatabase: ApplicationDatabase
 ) : RemoteMediator<Int, PhotoEntity>() {
 
@@ -47,7 +47,7 @@ class PhotoRemoteMediator(
                 }
             }
 
-            val response = unsplashApi.getPhotos(
+            val response = photoService.getPhotos(
                 page = loadKey,
                 perPage = ITEMS_PER_PAGE
             )
@@ -57,14 +57,14 @@ class PhotoRemoteMediator(
                     applicationDatabase.photoDao().clearAll()
                 }
 
-                val photoEntities = response.body()?.map { it.toPhotoEntity() }
+                val photoEntities = response.body()?.photos?.map { it.toPhotoEntity() }
                 photoEntities?.let {
                     applicationDatabase.photoDao().insert(photoEntities)
                 }
             }
 
             MediatorResult.Success(
-                endOfPaginationReached = response.body().isNullOrEmpty()
+                endOfPaginationReached = response.body()?.photos.isNullOrEmpty()
             )
         } catch (exception: IOException) {
             MediatorResult.Error(exception)
@@ -74,6 +74,6 @@ class PhotoRemoteMediator(
     }
 
     companion object {
-        const val ITEMS_PER_PAGE = 30
+        const val ITEMS_PER_PAGE = 80
     }
 }

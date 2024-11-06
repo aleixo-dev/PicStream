@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.home
+package com.nicolas.picstream.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,8 +12,8 @@ import com.nicolas.picstream.data.local.entity.PhotoEntity
 import com.nicolas.picstream.data.mapper.toPhoto
 import com.nicolas.picstream.data.model.Notification
 import com.nicolas.picstream.data.model.Photo
-import com.nicolas.picstream.data.model.Topic
 import com.nicolas.picstream.data.repository.PhotoRepository
+import com.nicolas.picstream.manager.DataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,17 +29,12 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val photoRepository: PhotoRepository,
     pager: Pager<Int, PhotoEntity>,
-    networkConnectivityService: NetworkConnectivityService
+    networkConnectivityService: NetworkConnectivityService,
+    private val dataStore: DataStore
 ) : ViewModel() {
 
     private val _photoQueryState = MutableStateFlow<PagingData<Photo>>(PagingData.empty())
     val photoQueryState: MutableStateFlow<PagingData<Photo>> get() = _photoQueryState
-
-    private val _photoTopicFilter = MutableStateFlow<PagingData<Photo>>(PagingData.empty())
-    val photoTopicFilter: MutableStateFlow<PagingData<Photo>> get() = _photoTopicFilter
-
-    private val _photoTopics = MutableStateFlow<List<Topic>>(emptyList())
-    val photoTopics: StateFlow<List<Topic>> get() = _photoTopics.asStateFlow()
 
     private val _isDownloadNotification = MutableStateFlow(false)
     val isDownloadNotification: StateFlow<Boolean> get() = _isDownloadNotification.asStateFlow()
@@ -57,6 +52,12 @@ class HomeViewModel(
         .map { pagingData -> pagingData.map { it.toPhoto() } }
         .cachedIn(viewModelScope)
 
+
+    val themeMode: StateFlow<Boolean> = dataStore.toggleTheme.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = false
+    )
 
     var hideKeyboard = MutableStateFlow(false)
         private set
@@ -87,18 +88,6 @@ class HomeViewModel(
             HomeUiState.Loading
         )
 
-    fun getTopics() = viewModelScope.launch {
-        photoRepository.getTopics()
-            .onSuccess { _photoTopics.value = it }
-            .onFailure { _photoTopics.value = emptyList() }
-    }
-
-    fun onTopic(slug: String) = viewModelScope.launch {
-        photoRepository.getTopicPhotos(slug)
-            .cachedIn(viewModelScope)
-            .collect { topic -> _photoTopicFilter.value = topic }
-    }
-
     fun onSearch(input: String) {
         hideKeyboard.update { false }
         _photoInputQuery.value = input
@@ -120,8 +109,11 @@ class HomeViewModel(
         _isDownloadNotification.update { isDownloadNotificationSave != -1L }
     }
 
-    fun getDownloadUrl(photoId: String) = viewModelScope.launch {
-        photoRepository.getDownloadUrl(photoId)
+    fun toggleTheme() {
+        viewModelScope.launch {
+            val mode = !themeMode.value
+            dataStore.toggleTheme(mode)
+        }
     }
 
     fun readAllDownloadNotification() = viewModelScope.launch {

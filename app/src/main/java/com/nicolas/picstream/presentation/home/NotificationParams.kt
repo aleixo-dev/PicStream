@@ -1,4 +1,4 @@
-package com.nicolas.picstream.ui.home
+package com.nicolas.picstream.presentation.home
 
 import com.nicolas.picstream.utils.toCurrentDate
 import java.util.Date
