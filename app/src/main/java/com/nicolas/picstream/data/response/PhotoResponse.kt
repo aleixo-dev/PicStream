@@ -5,12 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PhotoResponse(
-    @SerializedName("id")
     val id: String,
-    val slug : String,
-    @SerializedName("urls")
-    val url: UrlResponse,
-    val user : Photographer,
-    @SerializedName("alt_description")
-    val description : String?,
+    val src : PhotoSrc,
+    val photographer : String? = null,
+    val alt : String? = null,
 )

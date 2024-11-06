@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 data class PhotoEntity(
     @PrimaryKey
     val id : String,
-    val imageUrl : String,
-    val slug : String,
+    val url : String,
+    val alt : String,
     val photographerName : String,
-    val description : String,
 )
